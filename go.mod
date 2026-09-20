@@ -1,4 +1,4 @@
-module github.com/yourname/shardstream
+module github.com/ayushr17/shardstream
 
 go 1.22.2
 
