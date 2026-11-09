@@ -1,5 +1,7 @@
 # ShardStream
 
+[![CI](https://github.com/ayushr17/ShardStream/actions/workflows/ci.yml/badge.svg)](https://github.com/ayushr17/ShardStream/actions/workflows/ci.yml)
+
 A small distributed-systems demo: ingest a stream of generic "user did X"
 events, shard them by `source_id` using consistent hashing, rate-limit and
 aggregate metrics per shard through Redis, and query live totals through an
@@ -41,3 +43,18 @@ shardstream/
     └── queue/queue.go          # in-memory channel-based queue per shard
 ```
 
+## Testing, CI and load testing
+
+```bash
+go test -race ./...          # unit tests: hash ring, queue backpressure, event validation
+```
+
+GitHub Actions ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)) runs
+`gofmt`, `go vet`, `go build`, `go test -race`, and a Docker image build on every
+push and pull request.
+
+A [k6 load test](loadtest/README.md) is included. On a single shared vCPU the
+pipeline sustained ~2,000 events/sec at p99 under 40 ms with zero errors, and
+under a simulated Redis outage it shed load with immediate `503`s (p99 21.5 ms)
+rather than hanging, then recovered without a restart. Full results and the
+reproduction steps are in [`loadtest/README.md`](loadtest/README.md).

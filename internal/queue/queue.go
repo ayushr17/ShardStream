@@ -5,7 +5,7 @@
 // goroutines, in place of an HTTP hop between processes.
 package queue
 
-import "github.com/yourname/shardstream/internal/event"
+import "github.com/ayushr17/ShardStream/internal/event"
 
 // Manager owns one buffered channel per shard name.
 type Manager struct {
